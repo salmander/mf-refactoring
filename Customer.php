@@ -51,12 +51,7 @@ class Customer
         /** @var Rental $item */
         foreach ($rentals as $item) {
             
-            // add frequent renter points
-            $frequentRenterPoints++;
-            // add bonus for a two day new release rental
-            if (($item->getMovie()->getPriceCode() == Movie::NEW_RELEASE) && $item->getDaysRented() > 1) {
-                $frequentRenterPoints++;
-            }
+            $frequentRenterPoints += $item->getFrequentRenterPoints();
             //show figures for this rental
             $result .= "\t" . $item->getMovie()->getTitle() . "\t" . (string)$item->getCharge() . "\n";
             $totalAmount += $item->getCharge();
