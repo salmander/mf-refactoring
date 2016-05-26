@@ -50,7 +50,7 @@ class Customer
 
         /** @var Rental $item */
         foreach ($rentals as $item) {
-            $thisAmount = $this->amountFor($item);
+            $thisAmount = $item->getCharge();
 
             // add frequent renter points
             $frequentRenterPoints++;
@@ -69,12 +69,4 @@ class Customer
         return $result;
     }
 
-    /**
-     * @param Rental $rental
-     * @return float
-     */
-    private function amountFor(Rental $rental)
-    {
-        return $rental->getCharge();
-    }
 }
