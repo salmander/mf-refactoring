@@ -36,16 +36,13 @@ class Customer
 
     public function statement()
     {
-        /** @var array $rentals */
-        $rentals = $this->rentals;
-
         /** @var string $result */
         $result = "Rental Record for " . $this->getName() . "\n";
 
         /** @var Rental $item */
-        foreach ($rentals as $item) {
+        foreach ($this->rentals as $rental) {
             //show figures for this rental
-            $result .= "\t" . $item->getMovie()->getTitle() . "\t" . (string)$item->getCharge() . "\n";
+            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . (string)$rental->getCharge() . "\n";
         }
 
         //add footer lines
@@ -56,15 +53,12 @@ class Customer
 
     private function getTotalCharge()
     {
-        /** @var array $rentals */
-        $rentals = $this->rentals;
-
         /** @var float $totalAmount */
         $totalAmount = 0;
 
         /** @var Rental $item */
-        foreach ($rentals as $item) {
-            $totalAmount += $item->getCharge();
+        foreach ($this->rentals as $rental) {
+            $totalAmount += $rental->getCharge();
         }
 
         return $totalAmount;
@@ -72,15 +66,12 @@ class Customer
 
     private function getTotalFrequentRenterPoints()
     {
-        /** @var array $rentals */
-        $rentals = $this->rentals;
-
         /** @var int $frequentRenterPoints */
         $frequentRenterPoints = 0;
 
         /** @var Rental $item */
-        foreach ($rentals as $item) {
-            $frequentRenterPoints += $item->getFrequentRenterPoints();
+        foreach ($this->rentals as $rental) {
+            $frequentRenterPoints += $rental->getFrequentRenterPoints();
         }
 
         return $frequentRenterPoints;
@@ -88,14 +79,11 @@ class Customer
 
     public function htmlStatement()
     {
-        /** @var array $rentals */
-        $rentals = $this->rentals;
-
         $result = "<H1>Rentals for <EM>" . $this->getName() . "</EM></H1><P>\n";
 
-        foreach ($rentals as $item) {
+        foreach ($this->rentals as $rental) {
             //show figures for each rental
-            $result .= $item->getMovie()->getTitle() . ": " . (string)($item->getCharge()) . "<BR>\n";
+            $result .= $rental->getMovie()->getTitle() . ": " . (string)($rental->getCharge()) . "<BR>\n";
         }
 
         //add footer lines
