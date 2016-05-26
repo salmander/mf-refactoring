@@ -86,4 +86,22 @@ class Customer
         return $frequentRenterPoints;
     }
 
+    public function htmlStatement()
+    {
+        /** @var array $rentals */
+        $rentals = $this->rentals;
+
+        $result = "<H1>Rentals for <EM>" . $this->getName() . "</EM></H1><P>\n";
+
+        foreach ($rentals as $item) {
+            //show figures for each rental
+            $result .= $item->getMovie()->getTitle() . ": " . (string)($item->getCharge()) . "<BR>\n";
+        }
+
+        //add footer lines
+        $result .= "<P>You owe <EM>" . (string)$this->getTotalCharge() . "</EM><P>\n";
+        $result .= "On this rental you earned <EM>" .(string)$this->getTotalFrequentRenterPoints() . "</EM> frequent renter points<P>";
+        return $result;
+    }
+
 }
