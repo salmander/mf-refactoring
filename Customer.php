@@ -36,12 +36,6 @@ class Customer
 
     public function statement()
     {
-        /** @var float $totalAmount */
-        $totalAmount = 0;
-
-        /** @var int $frequentRenterPoints */
-        $frequentRenterPoints = 0;
-
         /** @var array $rentals */
         $rentals = $this->rentals;
 
@@ -50,17 +44,46 @@ class Customer
 
         /** @var Rental $item */
         foreach ($rentals as $item) {
-            
-            $frequentRenterPoints += $item->getFrequentRenterPoints();
             //show figures for this rental
             $result .= "\t" . $item->getMovie()->getTitle() . "\t" . (string)$item->getCharge() . "\n";
-            $totalAmount += $item->getCharge();
         }
 
         //add footer lines
-        $result .= "Amount owed is " . (string)$totalAmount . "\n";
-        $result .= "You earned " . (string)$frequentRenterPoints . " frequent renter points";
+        $result .= "Amount owed is " . (string)$this->getTotalCharge() . "\n";
+        $result .= "You earned " . (string)$this->getTotalFrequentRenterPoints() . " frequent renter points";
         return $result;
+    }
+
+    private function getTotalCharge()
+    {
+        /** @var array $rentals */
+        $rentals = $this->rentals;
+
+        /** @var float $totalAmount */
+        $totalAmount = 0;
+
+        /** @var Rental $item */
+        foreach ($rentals as $item) {
+            $totalAmount += $item->getCharge();
+        }
+
+        return $totalAmount;
+    }
+
+    private function getTotalFrequentRenterPoints()
+    {
+        /** @var array $rentals */
+        $rentals = $this->rentals;
+
+        /** @var int $frequentRenterPoints */
+        $frequentRenterPoints = 0;
+
+        /** @var Rental $item */
+        foreach ($rentals as $item) {
+            $frequentRenterPoints += $item->getFrequentRenterPoints();
+        }
+
+        return $frequentRenterPoints;
     }
 
 }
