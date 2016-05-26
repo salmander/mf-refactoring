@@ -12,9 +12,9 @@ class Movie
     private $title;
 
     /**
-     * @var int
+     * @var Price
      */
-    private $priceCode;
+    private $price;
 
     /**
      * Movie constructor.
@@ -24,7 +24,7 @@ class Movie
     public function __construct($title, $priceCode)
     {
         $this->title = $title;
-        $this->priceCode = $priceCode;
+        $this->setPriceCode($priceCode);
     }
 
     /**
@@ -40,15 +40,28 @@ class Movie
      */
     public function getPriceCode()
     {
-        return $this->priceCode;
+        return $this->price->getPriceCode();
     }
 
     /**
-     * @param int $priceCode
+     * @param $priceCode
+     * @throws Exception
      */
     public function setPriceCode($priceCode)
     {
-        $this->priceCode = $priceCode;
+        switch($priceCode) {
+            case self::NEW_RELEASE:
+                $this->price = new NewReleasePrice();
+                break;
+            case self::CHILDRENS:
+                $this->price = new ChildrensPrice();
+                break;
+            case self::REGULAR:
+                $this->price = new RegularPrice();
+                break;
+            default:
+                throw new \Exception(sprintf("Invalid price code '%d'", $priceCode));
+        }
     }
 
     /**
@@ -57,26 +70,7 @@ class Movie
      */
     public function getCharge($daysRented)
     {
-        $result = 0;
-
-        switch ($this->getPriceCode()) {
-            case Movie::REGULAR:
-                $result += 2;
-                if ($daysRented > 2) {
-                    $result += ($daysRented - 2) * 1.5;
-                }
-                break;
-            case Movie::NEW_RELEASE:
-                $result += $daysRented * 3;
-                break;
-            case Movie::CHILDRENS:
-                $result += 1.5;
-                if ($daysRented > 3) {
-                    $result += ($daysRented - 3) * 1.5;
-                }
-                break;
-        }
-        return $result;
+        return $this->price->getCharge($daysRented);
     }
 
     /**
@@ -85,12 +79,8 @@ class Movie
      */
     public function getFrequentRenterPoints($daysRented)
     {
-        if (($this->getPriceCode() == Movie::NEW_RELEASE) && $daysRented > 1) {
-            return 2;
-        }
-        else {
-            return 1;
-        }
+        return $this->price->getFrequentRenterPoints($daysRented);
     }
+
 
 }
