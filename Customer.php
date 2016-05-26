@@ -50,8 +50,7 @@ class Customer
 
         /** @var Rental $item */
         foreach ($rentals as $item) {
-            $thisAmount = $item->getCharge();
-
+            
             // add frequent renter points
             $frequentRenterPoints++;
             // add bonus for a two day new release rental
@@ -59,8 +58,8 @@ class Customer
                 $frequentRenterPoints++;
             }
             //show figures for this rental
-            $result .= "\t" . $item->getMovie()->getTitle() . "\t" . (string)$thisAmount . "\n";
-            $totalAmount += $thisAmount;
+            $result .= "\t" . $item->getMovie()->getTitle() . "\t" . (string)$item->getCharge() . "\n";
+            $totalAmount += $item->getCharge();
         }
 
         //add footer lines
