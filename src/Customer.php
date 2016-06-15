@@ -50,14 +50,12 @@ class Customer
 
         /** @var Rental $item */
         foreach ($rentals as $item) {
+            // Get amount
             $thisAmount = $this->getAmount($item);
 
-            // add frequent renter points
-            $frequentRenterPoints++;
-            // add bonus for a two day new release rental
-            if (($item->getMovie()->getPriceCode() == Movie::NEW_RELEASE) && $item->getDaysRented() > 1) {
-                $frequentRenterPoints++;
-            }
+            // Get frequent renter points
+            $frequentRenterPoints += $this->getFrequentRenterPoints($item);
+
             //show figures for this rental
             $result .= "\t" . $item->getMovie()->getTitle() . "\t" . (string)$thisAmount . "\n";
             $totalAmount += $thisAmount;
@@ -69,7 +67,7 @@ class Customer
         return $result;
     }
 
-    public function getAmount($item)
+    private function getAmount($item)
     {
         $thisAmount = 0;
         switch ($item->getMovie()->getPriceCode()) {
@@ -91,5 +89,17 @@ class Customer
         }
 
         return $thisAmount;
+    }
+
+    private function getFrequentRenterPoints($item)
+    {
+        // add frequent renter points
+        $frequentRenterPoints = 1;
+        // add bonus for a two day new release rental
+        if (($item->getMovie()->getPriceCode() == Movie::NEW_RELEASE) && $item->getDaysRented() > 1) {
+            $frequentRenterPoints++;
+        }
+
+        return $frequentRenterPoints;
     }
 }
